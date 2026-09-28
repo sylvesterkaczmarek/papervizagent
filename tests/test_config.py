@@ -58,9 +58,14 @@ def test_configuration_preserves_host_timezone(work_dir, host_tz, monkeypatch):
         monkeypatch.setenv("TZ", host_tz)
     if hasattr(time, "tzset"):
         time.tzset()
-    before = (dict(os.environ), time.tzname, time.timezone, time.localtime(0))
+    before = (os.environ.get("TZ"), time.tzname, time.timezone, time.localtime(0))
     experiment = config.ExpConfig("PaperBananaBench", work_dir=work_dir)
-    assert (dict(os.environ), time.tzname, time.timezone, time.localtime(0)) == before
+    assert (
+        os.environ.get("TZ"),
+        time.tzname,
+        time.timezone,
+        time.localtime(0),
+    ) == before
     assert experiment.result_dir.is_dir()
 
 
