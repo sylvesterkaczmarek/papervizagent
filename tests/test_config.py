@@ -14,11 +14,11 @@
 
 """Experiment timestamps must not change the process-wide timezone."""
 
-from datetime import datetime, timezone
 import os
 import subprocess
 import sys
 import time
+from datetime import datetime, timezone
 from unittest import mock
 from zoneinfo import ZoneInfo
 
