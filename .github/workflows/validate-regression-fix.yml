@@ -1,0 +1,50 @@
+name: Exact-source regression validation
+on:
+  push:
+    branches: ['validation/portable-experiment-timestamps-20260928']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            python: '3.11'
+          - os: ubuntu-24.04
+            python: '3.13'
+          - os: windows-latest
+            python: '3.12'
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: sylvesterkaczmarek/papervizagent
+          ref: 'a0e57af30392fa7a28e93ec6db14eacbda294068'
+          path: work
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install isolated test dependencies
+        run: |
+          python -m pip install PyYAML tzdata pytest pytest-cov ruff
+      - name: Validate exact source and regression controls
+        run: python validation/verify.py work evidence
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: evidence-${{ matrix.os }}-${{ matrix.python }}
+          path: evidence
+          retention-days: 14

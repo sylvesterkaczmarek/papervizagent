@@ -1,0 +1,19 @@
+{
+  "repo": "google-research/papervizagent",
+  "base_branch": "main",
+  "base": "e088a8fff74cc363b6897c0843631fff76484908",
+  "source": "utils/config.py",
+  "test": "tests/test_config.py",
+  "changed_sources": [
+    "requirements.txt",
+    "utils/config.py"
+  ],
+  "new_test_count": 20,
+  "original_failures": 4,
+  "issue": 7,
+  "issue_url": "https://github.com/google-research/papervizagent/issues/7",
+  "branch": "fix/portable-experiment-timestamps-20260928",
+  "title": "Create experiment timestamps without changing the process timezone",
+  "head": "a0e57af30392fa7a28e93ec6db14eacbda294068",
+  "name": "papervizagent"
+}
